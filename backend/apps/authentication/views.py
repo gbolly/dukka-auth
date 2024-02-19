@@ -1,3 +1,6 @@
+import base64
+from io import BytesIO
+
 from django.contrib.auth.hashers import check_password
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
@@ -12,6 +15,7 @@ from rest_framework.status import (
 )
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
+from gtts import gTTS
 
 from .models import User, get_countries
 from .serializers import (
@@ -70,3 +74,18 @@ def login_user(request):
     }
 
     return Response(response_data, status=HTTP_200_OK)
+
+
+@api_view(["GET"])
+def welcome_user(request):
+    user = request.user
+    if user.is_authenticated:
+        msg = f"Welcome, {user.full_name}!"
+    else:
+        msg = f"Hello user, you are not authorized to view this page. Please login!"
+    tts = gTTS(text=msg, lang='en')
+    audio_stream = BytesIO()
+    tts.write_to_fp(audio_stream)
+    audio_stream.seek(0)
+    audio_data_base64 = base64.b64encode(audio_stream.read()).decode('utf-8')
+    return Response({'audio_data_base64': audio_data_base64, "text": msg})
