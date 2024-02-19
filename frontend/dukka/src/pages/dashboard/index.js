@@ -14,6 +14,14 @@ const Dashboard = () => {
 
   
   useEffect(() => {
+    /*
+      Decided to take the text to speech welcome message implementation
+      to the backend because I wanted to show the implementation on both ends
+      i.e. speech-to-text on the frontend and text-to-speech at the backend.
+      Usually, for this use case it is simpler and more effective to do both
+      conversion in the frontend to safe time from API calls and
+      processing time except it is a longer or batch processing.
+    */
     const getWelcomeMsg = async () => {
       try {
         const response = await userWelcome();

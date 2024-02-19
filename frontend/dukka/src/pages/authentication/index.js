@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import Container from 'react-bootstrap/Container';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Alert from 'react-bootstrap/Alert';
@@ -7,12 +6,12 @@ import Alert from 'react-bootstrap/Alert';
 import Login from '../../components/Login';
 import SignUp from "../../components/Signup";
 
-const Authentication = () => {
+const Authentication = ({ setActiveLink }) => {
   const [activeKey, setActiveKey] = useState("login");
   const [msg, setMsg] = useState("");
 
   return (
-    <Container>
+    <div>
       {msg && (
         <Alert
           variant="success"
@@ -25,14 +24,17 @@ const Authentication = () => {
       )}
       <div
         className="mx-auto p-5"
-        style={{ marginTop: "7rem", width: "50%", border: "1px solid #E97D80" }}
+        style={{ width: "80%", border: "1px solid #E97D80" }}
       >
         <Tabs
           defaultActiveKey={activeKey}
           activeKey={activeKey}
           className="mb-5"
           variant="pills"
-          onSelect={(eventKey) => setActiveKey(eventKey)}
+          onSelect={(eventKey) => {
+            setActiveKey(eventKey);
+            setActiveLink(eventKey);
+          }}
           justify
         >
           <Tab eventKey="login" title="Login" >
@@ -43,7 +45,7 @@ const Authentication = () => {
           </Tab>
         </Tabs>
       </div>
-    </Container>
+    </div>
   );
 };
 

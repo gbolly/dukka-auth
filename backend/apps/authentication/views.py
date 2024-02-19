@@ -37,6 +37,7 @@ def create_user(request):
         serializer.is_valid(raise_exception=True)
         user = serializer.save()
 
+        # Generate jwt token for user to use for authentication
         token_object = RefreshToken.for_user(user)
 
         response_data = {
@@ -78,14 +79,26 @@ def login_user(request):
 
 @api_view(["GET"])
 def welcome_user(request):
+    # Get the authenticated user
     user = request.user
+
+    # Check if the user is authenticated
     if user.is_authenticated:
         msg = f"Welcome, {user.full_name}!"
     else:
         msg = f"Hello user, you are not authorized to view this page. Please login!"
+
+    # Convert text to speech
     tts = gTTS(text=msg, lang='en')
+
+    # Create an in-memory byte stream
     audio_stream = BytesIO()
+    # Write the speech to the byte stream
     tts.write_to_fp(audio_stream)
+
+    # Go back to the start of stream
     audio_stream.seek(0)
+
+    # Convert the audio data to base64 encoding
     audio_data_base64 = base64.b64encode(audio_stream.read()).decode('utf-8')
     return Response({'audio_data_base64': audio_data_base64, "text": msg})
