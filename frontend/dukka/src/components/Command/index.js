@@ -45,11 +45,11 @@ const CommandInstructions = ({ activeLink }) => {
             </ListGroup.Item>
             <ListGroup.Item>
               For select gender field, start your speech with
-              <b> my gender is </b>[your gender]
+              <b> my gender is </b>[your gender] options are male, female, other
             </ListGroup.Item>
             <ListGroup.Item>
               For select country field, start your speech with
-              <b> my country is </b>[your country]
+              <b> my country is </b>[your country] options are Algeria, Canada, Ghana, Nigeria
             </ListGroup.Item>
           </div>
         )}

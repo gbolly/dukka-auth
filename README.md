@@ -1,6 +1,12 @@
 # dukka-auth
 A speech-to-text user account creation with a voice-over welcome message
 
+## PR Segmentation
+- This PR https://github.com/gbolly/dukka-auth/pull/1 implements the folder structure for the project
+- This PR  https://github.com/gbolly/dukka-auth/pull/2 implements the user auth flow
+- This PR https://github.com/gbolly/dukka-auth/pull/3 implements the react  app
+- This PR https://github.com/gbolly/dukka-auth/pull/4  implements  docker and readme updates
+
 ## Speech to text commands
 When engaging with the web form for login and sign up, you have the option to input your credentials manually or utilize speech recognition if your browser supports it.
 
