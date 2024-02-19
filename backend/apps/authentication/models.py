@@ -5,16 +5,20 @@ from django.db import models
 from .manager import UserManager
 
 
+# Function to retrieve countries from settings
 def get_countries():
     return {i: i for i in settings.COUNTRIES}
 
 
+# Custom user model
 class User(AbstractBaseUser):
+    # Choices for gender field
     GENDER_CHOICES = (
         ('M', 'male'),
         ('F', 'female'),
         ('O', 'other'),
     )
+    # Mapper for gender choices
     GENDER_MAPPER = {v: k for k, v in GENDER_CHOICES}
 
     full_name = models.CharField(max_length=255)
@@ -30,7 +34,9 @@ class User(AbstractBaseUser):
 
     objects = UserManager()
 
+    # Field used for authentication
     USERNAME_FIELD = 'email'
+    # Additional required fields
     REQUIRED_FIELDS = ['full_name']
 
     def __str__(self):
