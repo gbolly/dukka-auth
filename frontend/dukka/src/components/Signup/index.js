@@ -80,6 +80,10 @@ const SignUp = ({setActiveKey, setMsg}) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    if (password !== password2) {
+      setHasPasswordError(true);
+      return
+    }
     setIsLoading(true);
     const data = {
       email,
@@ -89,8 +93,8 @@ const SignUp = ({setActiveKey, setMsg}) => {
       phone_number: phone,
       full_name: fullname
     };
-    const res = await userSignUp(data);
 
+    const res = await userSignUp(data);
     if (res.status !== 201) {
       console.log(res.data)
       setError(res.data[0])
@@ -150,9 +154,9 @@ const SignUp = ({setActiveKey, setMsg}) => {
             onChange={(e) => validatePassword(e.target.value)}
           />
           {hasPasswordError && (
-            <span style={{ color: "red", fontSize: 12 }}>
+            <p style={{ color: "red", fontSize: 12, textAlign: "left" }}>
               Passwords does not match
-            </span>
+            </p>
           )}
         </Form.Group>
         <Row>
