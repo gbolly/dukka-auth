@@ -14,11 +14,10 @@ import "./App.css";
 const App = () => {
   const [activeLink, setActiveLink] = useState("login");
   const location = useLocation();
-  console.log(location.pathname);
 
   return (
     <div className="App">
-      <Container style={{ marginTop: "5rem" }}>
+      <div style={{ marginTop: "5rem" }}>
         <Row>
           {location.pathname === "/" && (
             <Col className="mx-auto p-5">
@@ -32,7 +31,7 @@ const App = () => {
             </Routes>
           </Col>
         </Row>
-      </Container>
+      </div>
     </div>
   );
 }

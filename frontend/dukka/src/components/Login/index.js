@@ -48,7 +48,7 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
     const res = await userLogin({ email, password });
-    if (res.status !== 200) {
+    if (res && res.status !== 200) {
       setError(res.data)
     } else {
       await saveToStore('accessToken', res.data.access_token);

@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useSpeechRecognition } from "react-speech-recognition";
-import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
@@ -13,6 +12,8 @@ import { cleanEmail } from "../../utils/util";
 import SpeechMic from "../SpeechMic";
 import PasswordToggle from "../PasswordToggle";
 
+const errorStyle = { color: "red", fontSize: 12, textAlign: "left" };
+
 const SignUp = ({setActiveKey, setMsg}) => {
   const [fullname, setFullname] = useState("");
   const [email, setEmail] = useState("");
@@ -21,10 +22,11 @@ const SignUp = ({setActiveKey, setMsg}) => {
   const [country, setCountry] = useState("");
   const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [hasPasswordError, setHasPasswordError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState({});
 
   const commands = [
     {
@@ -91,16 +93,17 @@ const SignUp = ({setActiveKey, setMsg}) => {
       sex,
       country,
       phone_number: phone,
-      full_name: fullname
+      full_name: fullname,
+      is_staff: isAdmin
     };
 
     const res = await userSignUp(data);
-    if (res.status !== 201) {
-      console.log(res.data)
-      setError(res.data[0])
+    if (res && res.status !== 201) {
+      setError(res.data)
     } else {
       setActiveKey("login");
       setMsg("Account created successfully, please login.")
+      setError({})
     }
     setIsLoading(false);
   };
@@ -116,6 +119,9 @@ const SignUp = ({setActiveKey, setMsg}) => {
             onChange={(e) => setFullname(e.target.value)}
             value={fullname}
           />
+          {error.full_name && (
+            <p style={errorStyle}>{error.full_name}</p>
+          )}
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Control
@@ -125,6 +131,9 @@ const SignUp = ({setActiveKey, setMsg}) => {
             placeholder="Enter email"
             onChange={(e) => setEmail(e.target.value)}
           />
+          {error.email && (
+            <p style={errorStyle}>{error.email}</p>
+          )}
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Control
@@ -133,6 +142,9 @@ const SignUp = ({setActiveKey, setMsg}) => {
             onChange={(e) => setPhone(e.target.value)}
             placeholder="Phone Number"
           />
+          {error.phone_number && (
+            <p style={errorStyle}>{error.phone_number}</p>
+          )}
         </Form.Group>
         <InputGroup className="mb-3">
           <Form.Control
@@ -143,8 +155,10 @@ const SignUp = ({setActiveKey, setMsg}) => {
             onChange={(e) => setPassword(e.target.value)}
           />
           <PasswordToggle showPassword={showPassword} setShowPassword={setShowPassword} />
+          {error.password && (
+            <p style={errorStyle}>{error.password}</p>
+          )}
         </InputGroup>
-
         <Form.Group className="mb-3">
           <Form.Control
             size="lg"
@@ -154,9 +168,7 @@ const SignUp = ({setActiveKey, setMsg}) => {
             onChange={(e) => validatePassword(e.target.value)}
           />
           {hasPasswordError && (
-            <p style={{ color: "red", fontSize: 12, textAlign: "left" }}>
-              Passwords does not match
-            </p>
+            <p style={errorStyle}>Passwords does not match</p>
           )}
         </Form.Group>
         <Row>
@@ -182,6 +194,12 @@ const SignUp = ({setActiveKey, setMsg}) => {
             </Form.Group>
           </Col>
         </Row>
+        <Form.Check
+          type="checkbox"
+          label="Create as admin"
+          style={{ width: "35%", fontWeight: "bold" }}
+          onChange={() => setIsAdmin(!isAdmin)}
+        />
         <Button
           style={{ backgroundColor: "#E97D80" }}
           type="submit"
@@ -192,9 +210,6 @@ const SignUp = ({setActiveKey, setMsg}) => {
         </Button>
       </Form>
       <SpeechMic listening={listening}/>
-      {error && (
-        <Alert className="mt-5" variant="danger" onClose={() => setError("")} dismissible>{error}</Alert>
-      )}
     </div>
   )
 };
